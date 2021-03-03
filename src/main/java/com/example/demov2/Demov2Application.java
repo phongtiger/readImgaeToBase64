@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Base64;
 
 @SpringBootApplication
@@ -34,6 +36,20 @@ public class Demov2Application {
 
             bos.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        BufferedImage image = null;
+        byte[] imageByte;
+        try {
+            Base64.Decoder decoder = Base64.getDecoder();
+            imageByte = decoder.decode(imageString);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            image = ImageIO.read(bis);
+            bis.close();
+            File outputfile = new File("../../Downloads/ideaIU-2020.3.1/idea-IU-203.6682.168/bin/idea2.png");
+            ImageIO.write(image, "png", outputfile);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
